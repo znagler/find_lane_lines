@@ -1,8 +1,3 @@
-##Writeup Template
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
-
 **Advanced Lane Finding Project**
 
 The goals / steps of this project are the following:
@@ -18,19 +13,13 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./output_images/undistort.jps "Undistorted"
-[image2]: ./output_images/test1.jpg "Road Transformed"
-[image3]: ./output_images/sobel_or_hls.jpg "Binary Example"
-[image4]: ./output_images/warped.jpg "Warp Example"
-[image5]: ./output_images/sliding_window.jpg "Fit Visual"
-[image6]: ./output_images/lined_original.jpg "Output"
+[image1]: ./output_images/undistort-3.jpg "Undistorted"
+[image2]: ./output_images/test-3.jpg "Road Transformed"
+[image3]: ./output_images/sobel_or_hls-3.jpg "Binary Example"
+[image4]: ./output_images/warped-3.jpg "Warp Example"
+[image5]: ./output_images/sliding_window-3.jpg "Fit Visual"
+[image6]: ./output_images/lined_original-3.jpg "Output"
 [video1]: ./output.mp4 "Video"
-
-## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
-###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
-
----
-###Writeup / README
 
 
 ###Camera Calibration
