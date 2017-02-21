@@ -32,7 +32,7 @@ The goals / steps of this project are the following:
 
 ####1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-In Part 1 of the [IPython Notebook here](./project.ipynb), I calculated the camera matrix and distortion coefficients with the help of a couple OpenCV functions and 16 chessboard images.  I first detected the coordinates of the chessboard corners in all of the images with `findChessboardCorners`, and added them to a list.  Using those coordinates, along with a list of incrementing grid coordinates, `calibrateCamera` is able to calculate the distortion and return the camera matrix and distortion coefficients.  The OpenCV method `undistort` uses those two values to undistort images.  Here's the before-and-after of the undistortion. 
+In Part 1 of the [IPython Notebook here](./project.ipynb), I calculated the camera matrix and distortion coefficients with the help of a couple OpenCV functions and 16 chessboard images.  I first detected the coordinates of the chessboard corners in all of the images with `findChessboardCorners`, and added them to a list.  Using those coordinates, along with a list of incrementing grid coordinates, `calibrateCamera` is able to calculate the distortion and return the camera matrix and distortion coefficients.  The OpenCV method `undistort` uses those two values to undistort images from that camera.  Here's the before-and-after of the undistortion. 
 
 ![alt text][chess1]
 ![alt text][chess2]
@@ -47,7 +47,7 @@ I used the same values to undistort road images.  Here, the result is more subtl
 
 
 ####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
-Part 2 of the notebook uses a few computer vision techniques to illuminate the lane lines as much as possible,  The first is an application of a Sobel filter for edge detection in both the X and Y directions.  After the filter, I also convert the image to binary– each pixel is 'yes' or 'no' depending on the amount of edge detected and a provided threshold.  Picking good threshold values is a matter of experimentation and eyeballing.  Here's what the same image looks like with the Sobel threshold function applied.
+Part 2 of the notebook uses a few computer vision techniques to illuminate the lane lines as much as possible.  The first is an application of a Sobel filter for edge detection in both the X and Y directions.  After the filter, I also convert the image to binary– each pixel is 'yes' or 'no' depending on the amount of edge detected and a provided threshold.  Picking good threshold values is a matter of experimentation and eyeballing.  Here's what the same image looks like with the Sobel threshold function applied.
 
 ![alt text][image3]
 
@@ -61,7 +61,8 @@ To take advantage of both of those techniques, I create a new binary image that 
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+Skipping ahead to Part 4, I use `getPerspectiveTransform` to change the perspective of the image to a bird's eye view in order to focus-in on the lane lines.  This function takes coordinates of input and output quadrilaterals, which are shown below.  The input is trapezoidal because of the way lane lines appear to get closer as they are more distant, and the output is rectangular to undo that effect.
+<!-- The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
 
 ```
 src = np.float32(
@@ -75,19 +76,19 @@ dst = np.float32(
     [(img_size[0] * 3 / 4), img_size[1]],
     [(img_size[0] * 3 / 4), 0]])
 
-```
+``` -->
 This resulted in the following source and destination points:
 
-| Source        | Destination   | 
+| Inputs        | Ouputs   | 
 |:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+| 585, 460      | 280, 0        | 
+| 695, 460      | 1000, 0       |
+| 1120, 720     | 1000, 720     |
+| 695, 460      | 280, 720      |
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
+This is what the image looked like after the perspective transform.
 
-![alt text][image4]
+![alt text][image6]
 
 ####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
