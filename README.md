@@ -61,23 +61,8 @@ To take advantage of both of those techniques, I create a new binary image that 
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-Skipping ahead to Part 4, I use `getPerspectiveTransform` to change the perspective of the image to a bird's eye view in order to focus-in on the lane lines.  This function takes coordinates of input and output quadrilaterals, which are shown below.  The input is trapezoidal because of the way lane lines appear to get closer as they are more distant, and the output is rectangular to undo that effect.
-<!-- The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+Skipping ahead for a moment to the pipeline in Part 4, I use OpenCV's `getPerspectiveTransform` and `warpPerspective` to change the perspective of the image to a bird's eye view in order to focus directly on the lane lines.  This method takes coordinates of input and output quadrilaterals, which are shown below.  The input is trapezoidal because of the way lane lines appear to get closer together as they are more distant, and the output is rectangular to undo that effect.
 
-```
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
-
-``` -->
-This resulted in the following source and destination points:
 
 | Inputs        | Ouputs   | 
 |:-------------:|:-------------:| 
@@ -92,19 +77,23 @@ This is what the image looked like after the perspective transform.
 
 ####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+THIS IS PROBABLY MY LAST SECTION?
 
-![alt text][image5]
+![alt text][image7]
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+To calculate curvature, pixels are translated to meters using a rough unit conversion.  The left and right lane quadratics are re-fit in the new units, and the radius is calculated using those quadratics and the formula for determining radius shown [here](http://www.intmath.com/applications-differentiation/8-radius-curvature.php).  For simplicity, the mean of the left and right radius measurements is taken and displayed.
+
+For the car position, two points are compared– the center of the image and the 'projected center' between the lane lines.  The projected center of the lane lines is calculated by seeing what X values the left and right quadratics output for the Y values at the very bottom of the image, and taking their mean.
+
+
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+The second method in part four is responsible for translating bringing the lane lines back to the image in the original perspective.  It uses the same `warpPerspective` method, but this time with the inverse of the first warping matrix.
 
-![alt text][image6]
+![alt text][image8]
 
 ---
 
@@ -120,4 +109,9 @@ Here's a [link to my video result](./output.mp4)
 
 ####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+More could be done in a few places to improve the result.
+1. The Sobel and HLS methods do a decent job of illuminating lane line pixels, but they could certainly be improved by tweaking the binary thresholds.  Also, while the color channel used (S in HSL) is probably the most useful, it is certainly not the only useful one, so adding others from the same or different color spaces could help.
+
+2. The pipeline doesn't consider information from previous frames.  While it is nice for testing to have a method that treats every frame independently, it doesn't maximally use the information at hand.  This would be like a person re-evaluating his steering angle every fraction of a second instead of using his memory.  A smarter pipeline would consider previous frames and take them into account with some sort of weighted average.
+
+3.  Quadratics cannot capture more than one curve, so this would fail on frames that curve both left and right.
