@@ -77,7 +77,7 @@ This is what the image looked like after the perspective transform.
 
 ####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-THIS IS PROBABLY MY LAST SECTION?
+TODO
 
 ![alt text][image7]
 
@@ -91,7 +91,7 @@ For the car position, two points are compared– the center of the image and th
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-The second method in part four is responsible for translating bringing the lane lines back to the image in the original perspective.  It uses the same `warpPerspective` method, but this time with the inverse of the first warping matrix.
+The second method in Part 4 is responsible for bringing the lane lines back to the image in the original perspective.  It uses the same `warpPerspective` method, but this time with the inverse of the first warping matrix for the matrix-multipy.
 
 ![alt text][image8]
 
@@ -110,6 +110,7 @@ Here's a [link to my video result](./output.mp4)
 ####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 More could be done in a few places to improve the result.
+
 1. The Sobel and HLS methods do a decent job of illuminating lane line pixels, but they could certainly be improved by tweaking the binary thresholds.  Also, while the color channel used (S in HSL) is probably the most useful, it is certainly not the only useful one, so adding others from the same or different color spaces could help.
 
 2. The pipeline doesn't consider information from previous frames.  While it is nice for testing to have a method that treats every frame independently, it doesn't maximally use the information at hand.  This would be like a person re-evaluating his steering angle every fraction of a second instead of using his memory.  A smarter pipeline would consider previous frames and take them into account with some sort of weighted average.
