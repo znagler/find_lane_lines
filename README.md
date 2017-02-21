@@ -14,17 +14,19 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [chess1]: ./output_images/original_chessboard.jpg "Original"
-[chess2]: ./output_images/undistorted_chessboard.jpg "Original"
+[chess2]: ./output_images/undistorted_chessboard.jpg "Undistorted"
 [image1]: ./output_images/test3.jpg "Original"
 [image2]: ./output_images/undistort-3.jpg "Undistorted"
-[image3]: ./output_images/sobel_or_hls-3.jpg "Binary Example"
-[image4]: ./output_images/warp-3.jpg "Warp Example"
-[image5]: ./output_images/sliding_window-3.jpg "Fit Visual"
-[image6]: ./output_images/lined_original-3.jpg "Output"
+[image3]: ./output_images/sobel-3.jpg "Sobel Example"
+[image4]: ./output_images/hls-3.jpg "HLS Example"
+[image5]: ./output_images/sobel_or_hls-3.jpg "Binary Example"
+[image6]: ./output_images/warp-3.jpg "Warp Example"
+[image7]: ./output_images/sliding_window-3.jpg "Fit Visual"
+[image8]: ./output_images/lined_original-3.jpg "Output"
 [video1]: ./output.mp4 "Video"
 
 
-**Please see all the code in the [IPython Notebook here](./project.ipynb)**
+**Please see all the code in the [IPython Notebook](./project.ipynb)**
 
 ###Camera Calibration
 
@@ -38,12 +40,24 @@ In Part 1 of the [IPython Notebook here](./project.ipynb), I calculated the came
 ###Pipeline (single images)
 
 ####1. Provide an example of a distortion-corrected image.
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
+I used the same values to undistort road images.  Here, the result is more subtle, but it's still an important step for finding lane lines accurately.
+
+![alt text][image1]
 ![alt text][image2]
+
+
 ####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+Part 2 of the notebook uses a few computer vision techniques to illuminate the lane lines as much as possible,  The first is an application of a Sobel filter for edge detection in both the X and Y directions.  After the filter, I also convert the image to binary– each pixel is 'yes' or 'no' depending on the amount of edge detected and a provided threshold.  Picking good threshold values is a matter of experimentation and eyeballing.  Here's what the same image looks like with the Sobel threshold function applied.
 
 ![alt text][image3]
+
+In the next cell of Part 2, I define a function to convert the image to the HLS color space and look specifically at the S channel.  This channel is good for ignoring differences in shadow and lighting on the road.  A similar binary threshold is taken.  Here's the result.
+
+![alt text][image4]
+
+To take advantage of both of those techniques, I create a new binary image that labels a given pixel 'yes' if it was 'yes' for either Sobel or HLS.
+
+![alt text][image5]
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
