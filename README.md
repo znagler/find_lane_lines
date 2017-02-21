@@ -12,6 +12,9 @@ The goals / steps of this project are the following:
 * Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
 [//]: # (Image References)
+
+[chess1]: ./output_images/original_chessboard.jpg "Original"
+[chess2]: ./output_images/undistorted_chessboard.jpg "Original"
 [image1]: ./output_images/test3.jpg "Original"
 [image2]: ./output_images/undistort-3.jpg "Undistorted"
 [image3]: ./output_images/sobel_or_hls-3.jpg "Binary Example"
@@ -21,16 +24,16 @@ The goals / steps of this project are the following:
 [video1]: ./output.mp4 "Video"
 
 
-** Please see all the code in the IPython Notebook here[link to my video result](./project.ipynb) **
+**Please see all the code in the [IPython Notebook here](./project.ipynb)**
 
 ###Camera Calibration
 
 ####1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-In Part 1 of the [link to my video result](./project.ipynb), I calculated the camera matrix and distortion coefficients with the help of a couple OpenCV functions and 16 chessboard images.  I first detected the coordinates of the chessboard corners in all of the images with `findChessboardCorners`, and added them to a list.  Using those coordinates, along with a list of incrementing grid coordinates, `calibrateCamera` is able to calculate the distortion and return the camera matrix and distortion coefficients.  The OpenCV method `undistort` uses those two values to undistort images.  Here's the before-and-after of the undistortion. 
+In Part 1 of the [IPython Notebook here](./project.ipynb), I calculated the camera matrix and distortion coefficients with the help of a couple OpenCV functions and 16 chessboard images.  I first detected the coordinates of the chessboard corners in all of the images with `findChessboardCorners`, and added them to a list.  Using those coordinates, along with a list of incrementing grid coordinates, `calibrateCamera` is able to calculate the distortion and return the camera matrix and distortion coefficients.  The OpenCV method `undistort` uses those two values to undistort images.  Here's the before-and-after of the undistortion. 
 
-![alt text][image1]
-![alt text][image2]
+![alt text][chess1]
+![alt text][chess2]
 
 ###Pipeline (single images)
 
