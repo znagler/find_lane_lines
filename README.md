@@ -77,7 +77,7 @@ This is what the image looked like after the perspective transform.
 
 ####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-TODO
+The sliding window method at the start of Part 3 handles the final piece of lane line pixel identification.  The strategy involves cutting the image into 9 horizontal slices, and for each slice, trying estimate the X value of the lane lines.  This is done by taking a histogram at each slice that counts how many white "yes" pixels there are per X value.  The peaks in the histograms should be the locations of the lane lines.  After repeating the process on each slice, two separate quadratic equations are fit with numpy's `polyfit`.  Margins are applied to both quadratics to give the lanes realistic widths.  The image below shows the datapoints of the lane lines, along with the quadratics and shaded regions between the margins.
 
 ![alt text][image7]
 
@@ -85,13 +85,13 @@ TODO
 
 To calculate curvature, pixels are translated to meters using a rough unit conversion.  The left and right lane quadratics are re-fit in the new units, and the radius is calculated using those quadratics and the formula for determining radius shown [here](http://www.intmath.com/applications-differentiation/8-radius-curvature.php).  For simplicity, the mean of the left and right radius measurements is taken and displayed.
 
-For the car position, two points are compared– the center of the image and the 'projected center' between the lane lines.  The projected center of the lane lines is calculated by seeing what X values the left and right quadratics output for the Y values at the very bottom of the image, and taking their mean.
+For the car position, two points are compared– the center of the image and the 'projected center' between the lane lines.  The projected center of the lane lines is calculated by seeing what X values the left and right quadratics output for the Y values at the very bottom of the image, and taking their mean.  Both of these can be found in Step 7 of the Part 4 pipeline.
 
 
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-The second method in Part 4 is responsible for bringing the lane lines back to the image in the original perspective.  It uses the same `warpPerspective` method, but this time with the inverse of the first warping matrix for the matrix-multipy.
+The second method in Part 3 is responsible for bringing the lane lines back to the image in the original perspective.  It uses the same `warpPerspective` method, but this time with the inverse of the first warping matrix for the matrix-multipy.
 
 ![alt text][image8]
 
