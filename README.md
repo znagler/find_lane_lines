@@ -115,4 +115,4 @@ More could be done in a few places to improve the result.
 
 2. The pipeline doesn't consider information from previous frames.  While it is nice for testing to have a method that treats every frame independently, it doesn't maximally use the information at hand.  This would be like a person re-evaluating his steering angle every fraction of a second instead of using his memory.  A smarter pipeline would consider previous frames and take them into account with some sort of weighted average.
 
-3.  Quadratics cannot capture more than one curve, so this would fail on frames that curve both left and right.
+3.  Quadratics cannot capture more than one curve, so this would fail on frames where the road curves both left and right.
