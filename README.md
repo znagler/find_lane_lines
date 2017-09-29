@@ -1,4 +1,4 @@
-**Advanced Lane Finding Project**
+# Advanced Lane Finding Project
 
 The goals / steps of this project are the following:
 
@@ -28,25 +28,25 @@ The goals / steps of this project are the following:
 
 **Please see all the code in the [IPython Notebook](./project.ipynb)**
 
-###Camera Calibration
+### Camera Calibration
 
-####1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
+#### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
 In Part 1 of the [IPython Notebook here](./project.ipynb), I calculated the camera matrix and distortion coefficients with the help of a couple OpenCV functions and 16 chessboard images.  I first detected the coordinates of the chessboard corners in all of the images with `findChessboardCorners`, and added them to a list.  Using those coordinates, along with a list of incrementing grid coordinates, `calibrateCamera` is able to calculate the distortion and return the camera matrix and distortion coefficients.  The OpenCV method `undistort` uses those two values to undistort images from that camera.  Here's the before-and-after of the undistortion. 
 
 ![alt text][chess1]
 ![alt text][chess2]
 
-###Pipeline (single images)
+### Pipeline (single images)
 
-####1. Provide an example of a distortion-corrected image.
+#### 1. Provide an example of a distortion-corrected image.
 I used the same values to undistort road images.  Here, the result is more subtle, but it's still an important step for finding lane lines accurately.
 
 ![alt text][image1]
 ![alt text][image2]
 
 
-####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+#### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 Part 2 of the notebook uses a few computer vision techniques to illuminate the lane lines as much as possible.  The first is an application of a Sobel filter for edge detection in both the X and Y directions.  After the filter, I also convert the image to binary– each pixel is 'yes' or 'no' depending on the amount of edge detected and a provided threshold.  Picking good threshold values is a matter of experimentation and eyeballing.  Here's what the same image looks like with the Sobel threshold function applied.
 
 ![alt text][image3]
@@ -59,7 +59,7 @@ To take advantage of both of those techniques, I create a new binary image that 
 
 ![alt text][image5]
 
-####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
+#### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
 Skipping ahead for a moment to the pipeline in Part 4, I use OpenCV's `getPerspectiveTransform` and `warpPerspective` to change the perspective of the image to a bird's eye view in order to focus directly on the lane lines.  This method takes coordinates of input and output quadrilaterals, which are shown below.  The input is trapezoidal because of the way lane lines appear to get closer together as they are more distant, and the output is rectangular to undo that effect.
 
@@ -75,13 +75,13 @@ This is what the image looked like after the perspective transform.
 
 ![alt text][image6]
 
-####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+#### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
 The sliding window method at the start of Part 3 handles the final piece of lane line pixel identification.  The strategy involves cutting the image into 9 horizontal slices, and for each slice, trying to figure out the X value of the lane lines.  This is done by taking a histogram at each slice that counts how many white "yes" pixels there are per X value.  The peaks in the histograms should be the locations of the lane lines.  White pixels near the peaks are pushed into lists, and the process is repeated on each slice.  Using the identified pixels, two quadratic equations are fit with numpy's `polyfit`, one per lane.  Margins are applied to the quadratics to give the lanes realistic widths.  The image below shows the datapoints of the lane lines, along with the quadratics and shaded regions between the margins.
 
 ![alt text][image7]
 
-####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
 To calculate curvature, pixels are translated to meters using a rough unit conversion.  The left and right lane quadratics are re-fit in the new units, and the radius is calculated using those quadratics and the formula for determining radius shown [here](http://www.intmath.com/applications-differentiation/8-radius-curvature.php).  For simplicity, the mean of the left and right radius measurements is taken and displayed.
 
@@ -89,7 +89,7 @@ For the car position, two points are compared– the center of the image and th
 
 
 
-####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
 The second method in Part 3 is responsible for bringing the lane lines back to the image in the original perspective.  It uses the same `warpPerspective` method, but this time with the inverse of the first warping matrix for the matrix-multipy.
 
@@ -97,17 +97,17 @@ The second method in Part 3 is responsible for bringing the lane lines back to t
 
 ---
 
-###Pipeline (video)
+### Pipeline (video)
 
-####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
 Here's a [link to my video result](./output.mp4)
 
 ---
 
-###Discussion
+### Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 More could be done in a few places to improve the result.
 
